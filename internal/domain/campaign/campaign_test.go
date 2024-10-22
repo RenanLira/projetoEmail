@@ -4,12 +4,14 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jaswdr/faker/v2"
 	"github.com/stretchr/testify/assert"
 )
 
 var (
+	fake    = faker.New()
 	name    = "My Campaign"
-	content = "My Content"
+	content = fake.Lorem().Text(100)
 	emails  = []string{"tste@email.com", "email2@teste.com"}
 )
 
@@ -50,5 +52,5 @@ func Test_New_MustValidateName(t *testing.T) {
 
 	_, err := New("", content, emails)
 
-	assert.EqualError(err, "name is required")
+	assert.EqualError(err, "The field Name must have at least 5 characters")
 }
