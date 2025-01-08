@@ -14,11 +14,17 @@ func main() {
 
 	r.Use(LoggerMiddleware)
 
-	service := campaign.Service{Repository: &database.CampaignRepository{}}
-	handler := endpoints.Handler{CampaignService: service}
+	db := database.NewDB()
 
-	r.Post("/campaings", handler.CampaignPost)
-
+	service := campaign.Service{Repository: &database.CampaignRepository{Db: db}}
+	handler := endpoints.Handler{CampaignService: &service}
+	r.Route("/campaings", func(r chi.Router) {
+		r.Post("/", handler.CampaignPost)
+		r.Get("/", handler.CampaignsGet)
+		r.Get("/{id}", handler.CampaignGet)
+		r.Delete("/{id}", handler.CampaignDelete)
+		r.Patch("/{id}/cancel", handler.CampaignCancelPatch)
+	})
 	http.ListenAndServe(":8080", r)
 }
 

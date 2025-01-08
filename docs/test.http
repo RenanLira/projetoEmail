@@ -1,0 +1,27 @@
+
+GET http://localhost:8080/campaings
+
+###
+
+GET http://localhost:8080/campaings/ctul1bbi1v0efppviiog
+
+###
+
+PATCH  http://localhost:8080/campaings/ctul1bbi1v0efppviiog/cancel
+
+###
+
+DELETE  http://localhost:8080/campaings/ctul1bbi1v0efppviiog
+
+###
+
+POST http://localhost:8080/campaings
+Content-Type: application/json
+
+{
+  "name": "Campaing1",
+  "content": "Content 1",
+  "emails": [
+    "renan@email.com"
+  ]
+}

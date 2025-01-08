@@ -1,7 +1,6 @@
 package campaign
 
 import (
-	"projetoEmail/internal/contract"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,9 +16,29 @@ func (r *repositoryMock) Save(campaign *Campaign) error {
 	return args.Error(0)
 }
 
+func (r *repositoryMock) All() ([]Campaign, error) {
+	args := r.Called()
+	return args.Get(0).([]Campaign), args.Error(1)
+}
+
+func (r *repositoryMock) Get(id string) (Campaign, error) {
+	args := r.Called(id)
+	return args.Get(0).(Campaign), args.Error(1)
+}
+
+func (r *repositoryMock) Update(id string, values *Campaign) error {
+	args := r.Called(id, values)
+	return args.Error(0)
+}
+
+func (r *repositoryMock) Delete(id string) error {
+	args := r.Called(id)
+	return args.Error(0)
+}
+
 func Test_CreateCampaign(t *testing.T) {
 	assert := assert.New(t)
-	dto := contract.NewCampaignDTO{
+	dto := NewCampaignDTO{
 		Name:    "My Campaign",
 		Content: "My Content",
 		Emails:  []string{"teste@email.com"},
