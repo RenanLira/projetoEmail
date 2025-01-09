@@ -31,10 +31,10 @@ func (c *CampaignRepository) Get(id string) (campaign.Campaign, error) {
 
 	if tx.Error != nil {
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			return campaignData, internalerrors.ErrCampaignNotFound
+			return campaignData, internalerrors.NewErrEntityNotFound("campaign")
 		}
 
-		return campaignData, internalerrors.ErrInternal
+		return campaignData, internalerrors.NewErrInternal(tx.Error.Error())
 	}
 
 	return campaignData, nil

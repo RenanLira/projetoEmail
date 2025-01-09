@@ -25,7 +25,7 @@ func (s *Service) Create(dto NewCampaignDTO) (id string, err error) {
 
 	err = s.Repository.Save(campaign)
 	if err != nil {
-		err = internalerrors.ErrInternal
+		err = internalerrors.NewErrInternal(err.Error())
 		return
 	}
 
@@ -61,13 +61,13 @@ func (s *Service) Cancel(id string) error {
 	}
 
 	if campaign.Status != Pending {
-		return internalerrors.ErrCampaignNotPending
+		return internalerrors.NewErrCampaignNotPending(id)
 	}
 
 	campaign.Cancel()
 	err = s.Repository.Update(id, &campaign)
 	if err != nil {
-		return internalerrors.ErrInternal
+		return internalerrors.NewErrInternal(err.Error())
 	}
 
 	return nil
@@ -83,7 +83,7 @@ func (s *Service) Delete(id string) error {
 	campaign.Delete()
 	err = s.Repository.Update(id, &campaign)
 	if err != nil {
-		return internalerrors.ErrInternal
+		return internalerrors.NewErrInternal(err.Error())
 	}
 
 	return nil
