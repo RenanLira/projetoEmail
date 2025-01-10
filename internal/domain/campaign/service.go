@@ -18,7 +18,7 @@ type Service struct {
 
 func (s *Service) Create(dto NewCampaignDTO) (id string, err error) {
 
-	campaign, err := New(dto.Name, dto.Content, dto.Emails)
+	campaign, err := New(dto.Name, dto.Content, dto.Emails, dto.CreatedBy)
 	if err != nil {
 		return
 	}

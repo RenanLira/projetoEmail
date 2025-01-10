@@ -1,7 +1,6 @@
 package campaign
 
 import (
-	"fmt"
 	internalerrors "projetoEmail/internal/internal_errors"
 	"time"
 
@@ -41,6 +40,7 @@ type Campaign struct {
 	Content   string    `validate:"min=5" gorm:"size:500" json:"content"`
 	Contacts  []Contact `validate:"min=1,dive" json:"contacts,omitempty" gorm:"OnDelete:CASCADE"`
 	Status    Status    `gorm:"" json:"status"`
+	CreatedBy string    `json:"created_by"`
 }
 
 func (c *Campaign) Cancel() {
@@ -51,23 +51,23 @@ func (c *Campaign) Delete() {
 	c.Status = Deleted
 }
 
-func New(name string, content string, emails []string) (campaign *Campaign, err error) {
+func New(name string, content string, emails []string, createdBy string) (campaign *Campaign, err error) {
 
 	contacts := make([]Contact, len(emails))
+	id := xid.New().String()
 	for i, email := range emails {
-		contacts[i] = Contact{Email: email, ID: xid.New().String()}
+		contacts[i] = Contact{Email: email, ID: xid.New().String(), CampaignId: id}
 	}
 
 	campaign = &Campaign{
-		ID:        xid.New().String(),
+		ID:        id,
 		Name:      name,
 		CreatedAt: time.Now(),
 		Content:   content,
 		Contacts:  contacts,
 		Status:    Pending,
+		CreatedBy: createdBy,
 	}
-
-	fmt.Println(campaign)
 
 	err = internalerrors.ValidateStruct(campaign)
 
