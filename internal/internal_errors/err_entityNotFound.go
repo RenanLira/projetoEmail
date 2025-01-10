@@ -1,8 +1,10 @@
 package internalerrors
 
-var ErrEntityNotFoundValue *ErrEntityNotFound
+import "net/http"
+
 
 type ErrEntityNotFound struct {
+	HttpError
 	Entity string
 }
 
@@ -11,5 +13,5 @@ func (e ErrEntityNotFound) Error() string {
 }
 
 func NewErrEntityNotFound(entity string) ErrEntityNotFound {
-	return ErrEntityNotFound{Entity: entity}
+	return ErrEntityNotFound{Entity: entity, HttpError: HttpError{HttpStatus: http.StatusNotFound}}
 }
