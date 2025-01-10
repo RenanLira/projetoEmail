@@ -15,5 +15,5 @@ func (h *Handler) CampaignCancelPatch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.SendJSON(w, nil, map[string]string{"message": "Campaign cancelled"})
+	utils.SendJSON(w, nil, &utils.Success{Status: http.StatusOK, Data: map[string]string{"message": "Campanha cancelada com sucesso"}})
 }

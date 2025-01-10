@@ -21,5 +21,7 @@ func (h *Handler) CampaignPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.SendJSON(w, nil, id)
+	res := &utils.Success{Status: http.StatusCreated, Data: id}
+
+	utils.SendJSON(w, nil, res)
 }

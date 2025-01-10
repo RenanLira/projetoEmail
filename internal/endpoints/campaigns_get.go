@@ -13,5 +13,7 @@ func (h *Handler) CampaignsGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.SendJSON(w, nil, campaigns)
+	res := &utils.Success{Status: http.StatusOK, Data: campaigns}
+
+	utils.SendJSON(w, nil, res)
 }

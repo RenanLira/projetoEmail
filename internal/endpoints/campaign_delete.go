@@ -16,5 +16,7 @@ func (h *Handler) CampaignDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.SendJSON(w, nil, map[string]string{"message": "Campaign deleted"})
+	res := utils.Success{Status: http.StatusOK, Data: map[string]string{"message": "Campanha deletada com sucesso"}}
+
+	utils.SendJSON(w, nil, &res)
 }

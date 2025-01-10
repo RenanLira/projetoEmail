@@ -65,5 +65,5 @@ func Test_CampaignsPost_should_save_new_campaign(t *testing.T) {
 
 	handler.CampaignPost(res, req)
 
-	assert.Equal(http.StatusOK, res.Code)
+	assert.Equal(http.StatusCreated, res.Code)
 }
