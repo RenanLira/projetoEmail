@@ -1,22 +1,26 @@
-
-GET http://localhost:8080/campaings
-
-###
-
-GET http://localhost:8080/campaings/ctul1bbi1v0efppvii
+@url = http://localhost:8080
 
 ###
 
-PATCH  http://localhost:8080/campaings/ctul1bbi1v0efppviiog/cancel
+GET {{url}}/campaings
 
 ###
 
-DELETE  http://localhost:8080/campaings/ctul1bbi1v0efppviiog
+GET {{url}}/campaings/ctul1bbi1v0efppvii
 
 ###
 
-POST http://localhost:8080/campaings
+PATCH  {{url}}/campaings/ctul1bbi1v0efviiog/cancel
+
+###
+
+DELETE {{url}}/campaings/ctul1bbi1v0efppviiog
+
+###
+
+POST {{url}}/campaings
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "name": "Campaing1",
@@ -25,3 +29,14 @@ Content-Type: application/json
     "renan@email.com"
   ]
 }
+
+###
+# @name token
+POST http://localhost:8081/realms/providerGoEmail/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=projetoEmail&username=renanlira&password=123456&grant_type=password
+
+###
+
+@accessToken = {{token.response.body.access_token}}
