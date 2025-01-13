@@ -40,7 +40,7 @@ type Campaign struct {
 	Content   string    `validate:"min=5" gorm:"size:500" json:"content"`
 	Contacts  []Contact `validate:"min=1,dive" json:"contacts,omitempty" gorm:"OnDelete:CASCADE"`
 	Status    Status    `gorm:"" json:"status"`
-	CreatedBy string    `json:"created_by"`
+	CreatedBy string    `validate:"required,email" json:"created_by"`
 }
 
 func (c *Campaign) Cancel() {

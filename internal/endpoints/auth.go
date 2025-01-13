@@ -1,12 +1,15 @@
 package endpoints
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	internalerrors "projetoEmail/internal/internal_errors"
 	"projetoEmail/internal/utils"
 	"strings"
 
 	"github.com/coreos/go-oidc/v3/oidc"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func Auth(next http.Handler) http.Handler {
@@ -33,7 +36,13 @@ func Auth(next http.Handler) http.Handler {
 			return
 		}
 
+		tokenData, _ := jwt.Parse(authorization, nil)
+		claims := tokenData.Claims.(jwt.MapClaims)
+		email := claims["email"].(string)
+		fmt.Println("email verifeid: ", email)
 
-		next.ServeHTTP(w, r)
+		ctx := context.WithValue(r.Context(), "email", email)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
