@@ -7,9 +7,16 @@ import (
 	"projetoEmail/internal/infra/database"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+
 	r := chi.NewRouter()
 
 	r.Use(LoggerMiddleware)
@@ -20,7 +27,7 @@ func main() {
 	handler := endpoints.Handler{CampaignService: &service}
 	r.Route("/campaings", func(r chi.Router) {
 		r.Use(endpoints.Auth)
-		
+
 		r.Post("/", handler.CampaignPost)
 		r.Get("/", handler.CampaignsGet)
 		r.Get("/{id}", handler.CampaignGet)

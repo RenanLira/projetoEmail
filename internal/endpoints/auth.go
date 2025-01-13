@@ -2,8 +2,8 @@ package endpoints
 
 import (
 	"context"
-	"fmt"
 	"net/http"
+	"os"
 	internalerrors "projetoEmail/internal/internal_errors"
 	"projetoEmail/internal/utils"
 	"strings"
@@ -23,7 +23,7 @@ func Auth(next http.Handler) http.Handler {
 
 		authorization := strings.Replace(token, "Bearer ", "", 1)
 
-		provider, err := oidc.NewProvider(r.Context(), "http://localhost:8081/realms/providerGoEmail")
+		provider, err := oidc.NewProvider(r.Context(), os.Getenv("OIDC_PROVIDER"))
 		if err != nil {
 			utils.SendJSON(w, internalerrors.NewErrInternal("error to connect to the provider"), nil)
 			return
@@ -39,7 +39,6 @@ func Auth(next http.Handler) http.Handler {
 		tokenData, _ := jwt.Parse(authorization, nil)
 		claims := tokenData.Claims.(jwt.MapClaims)
 		email := claims["email"].(string)
-		fmt.Println("email verifeid: ", email)
 
 		ctx := context.WithValue(r.Context(), "email", email)
 

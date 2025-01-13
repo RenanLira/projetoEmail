@@ -1,7 +1,6 @@
 package endpoints
 
 import (
-	"fmt"
 	"net/http"
 
 	"projetoEmail/internal/domain/campaign"
@@ -17,7 +16,6 @@ func (h *Handler) CampaignPost(w http.ResponseWriter, r *http.Request) {
 
 	// Get email from context for CreatedBy field
 	email := r.Context().Value("email").(string)
-	fmt.Println("Email from context: ", email)
 	request.CreatedBy = email
 
 	id, err := h.CampaignService.Create(request)
