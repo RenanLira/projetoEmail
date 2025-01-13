@@ -3,7 +3,7 @@
 ###
 
 GET {{url}}/campaings
-
+Authorization: Bearer {{accessToken}}
 ###
 
 GET {{url}}/campaings/ctul1bbi1v0efppvii
