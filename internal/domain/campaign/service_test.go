@@ -1,57 +1,48 @@
-package campaign
+package campaign_test
 
 import (
+	"projetoEmail/internal/domain/campaign"
+	"projetoEmail/internal/tests/mocks"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-type repositoryMock struct {
-	mock.Mock
-}
+var (
+	sendMail = func(campaign *campaign.Campaign) error {
+		return nil
+	}
+	repositoryMock *mocks.RepositoryMock
+	service        campaign.Service
+	campaignMock   *campaign.Campaign
+)
 
-func (r *repositoryMock) Save(campaign *Campaign) error {
-	args := r.Called(campaign)
-	return args.Error(0)
-}
+func setUp() {
+	repositoryMock = new(mocks.RepositoryMock)
+	service = campaign.Service{
+		Repository: repositoryMock,
+		SendMail:   sendMail,
+	}
 
-func (r *repositoryMock) All() ([]Campaign, error) {
-	args := r.Called()
-	return args.Get(0).([]Campaign), args.Error(1)
-}
-
-func (r *repositoryMock) Get(id string) (Campaign, error) {
-	args := r.Called(id)
-	return args.Get(0).(Campaign), args.Error(1)
-}
-
-func (r *repositoryMock) Update(id string, values *Campaign) error {
-	args := r.Called(id, values)
-	return args.Error(0)
-}
-
-func (r *repositoryMock) Delete(id string) error {
-	args := r.Called(id)
-	return args.Error(0)
+	campaignMock, _ = campaign.New("My Campaign", "My Content", []string{"test@email.com"}, "creator@email.com")
 }
 
 func Test_CreateCampaign(t *testing.T) {
-	assert := assert.New(t)
-	dto := NewCampaignDTO{
-		Name:    "My Campaign",
-		Content: "My Content",
-		Emails:  []string{"teste@email.com"},
+	setUp()
+
+	dto := campaign.NewCampaignDTO{
+		Name:      "My Campaign",
+		Content:   "My Content",
+		CreatedBy: "test@email.com",
+		Emails:    []string{"teste@email.com"},
 	}
 
-	repository := new(repositoryMock)
-	repository.On("Save", mock.Anything).Return(nil)
-
-	service := Service{Repository: repository}
+	repositoryMock.On("Save", mock.Anything).Return(nil)
 
 	_, err := service.Create(dto)
 
-	assert.Nil(err)
-	repository.AssertExpectations(t)
+	assert.Nil(t, err)
+	repositoryMock.AssertExpectations(t)
 
 }

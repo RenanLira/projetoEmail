@@ -45,6 +45,12 @@ func (s *ServiceMock) Delete(id string) error {
 	return args.Error(0)
 }
 
+func (s *ServiceMock) Start(id string) error {
+	args := s.Called(id)
+
+	return args.Error(0)
+}
+
 func Test_CampaignsPost_should_save_new_campaign(t *testing.T) {
 	assert := assert.New(t)
 	service := new(ServiceMock)
