@@ -5,6 +5,7 @@ import (
 	"projetoEmail/internal/domain/campaign"
 	"projetoEmail/internal/endpoints"
 	"projetoEmail/internal/infra/database"
+	"projetoEmail/internal/infra/mail"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
@@ -23,7 +24,7 @@ func main() {
 
 	db := database.NewDB()
 
-	service := campaign.Service{Repository: &database.CampaignRepository{Db: db}}
+	service := campaign.Service{Repository: &database.CampaignRepository{Db: db}, SendMail: mail.SendMail}
 	handler := endpoints.Handler{CampaignService: &service}
 	r.Route("/campaings", func(r chi.Router) {
 		r.Use(endpoints.Auth)
