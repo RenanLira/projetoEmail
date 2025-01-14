@@ -29,8 +29,7 @@ const (
 	Pending Status = iota
 	Cancelled
 	Deleted
-	Started
-	Finished
+	Done
 )
 
 type Campaign struct {
@@ -49,6 +48,10 @@ func (c *Campaign) Cancel() {
 
 func (c *Campaign) Delete() {
 	c.Status = Deleted
+}
+
+func (c *Campaign) Doned() {
+	c.Status = Done
 }
 
 func New(name string, content string, emails []string, createdBy string) (campaign *Campaign, err error) {
