@@ -19,22 +19,22 @@ type Service struct {
 	SendMail   func(campaign *Campaign) error
 }
 
-func (s *Service) Create(dto NewCampaignDTO) (id string, err error) {
+func (s *Service) Create(dto NewCampaignDTO) (string, error) {
 
 	campaign, err := New(dto.Name, dto.Content, dto.Emails, dto.CreatedBy)
 	if err != nil {
-		return
+		return "", err
 	}
 
 	err = s.Repository.Save(campaign)
 	if err != nil {
 		err = internalerrors.NewErrInternal(err.Error())
-		return
+		return "", err
 	}
 
-	id = campaign.ID
+	id := campaign.ID
 
-	return
+	return id, nil
 }
 
 func (s *Service) All() ([]Campaign, error) {

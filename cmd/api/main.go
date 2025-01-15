@@ -31,9 +31,12 @@ func main() {
 
 		r.Post("/", handler.CampaignPost)
 		r.Get("/", handler.CampaignsGet)
-		r.Get("/{id}", handler.CampaignGet)
-		r.Delete("/{id}", handler.CampaignDelete)
-		r.Patch("/{id}/cancel", handler.CampaignCancelPatch)
+		r.Route("/{id}", func(r chi.Router) {
+			r.Get("/", handler.CampaignGet)
+			r.Delete("/", handler.CampaignDelete)
+			r.Patch("/cancel", handler.CampaignCancelPatch)
+			r.Patch("/start", handler.CampaignStart)
+		})
 	})
 	http.ListenAndServe(":8080", r)
 }
