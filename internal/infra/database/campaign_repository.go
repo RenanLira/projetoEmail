@@ -34,7 +34,7 @@ func (c *CampaignRepository) Get(id string) (campaign.Campaign, error) {
 			return campaignData, internalerrors.NewErrEntityNotFound("campaign")
 		}
 
-		return campaignData, internalerrors.NewErrInternal(tx.Error.Error())
+		return campaignData, tx.Error
 	}
 
 	return campaignData, nil
