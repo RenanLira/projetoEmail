@@ -34,12 +34,13 @@ const (
 
 type Campaign struct {
 	ID        string    `validate:"required" json:"id"`
-	Name      string    `validate:"min=5,max=100" gorm:"size:100" json:"name"`
-	CreatedAt time.Time `validate:"required" json:"created_at"`
-	Content   string    `validate:"min=5" gorm:"size:500" json:"content"`
+	Name      string    `validate:"min=5,max=100" gorm:"size:100;not null" json:"name"`
+	CreatedAt time.Time `validate:"required" json:"created_at" gorm:"autoCreateTime"`
+	UpdateAt  time.Time `json:"update_at" gorm:"autoUpdateTime"`
+	Content   string    `validate:"min=5" gorm:"size:500;not null" json:"content"`
 	Contacts  []Contact `validate:"min=1,dive" json:"contacts,omitempty" gorm:"OnDelete:CASCADE"`
-	Status    Status    `gorm:"" json:"status"`
-	CreatedBy string    `validate:"required,email" json:"created_by"`
+	Status    Status    `gorm:"not null" json:"status"`
+	CreatedBy string    `validate:"required,email" json:"created_by" gorm:"not null"`
 }
 
 func (c *Campaign) Cancel() {
