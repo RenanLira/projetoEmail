@@ -13,7 +13,7 @@ func SendMail(campaign *campaign.Campaign) error {
 	emails := getEmailsFromContacts(campaign.Contacts)
 
 	m := gomail.NewMessage()
-	m.SetHeader("From", os.Getenv("EMAIL_USER"))
+	m.SetAddressHeader("From", campaign.CreatedBy, "Renan Lira")
 	m.SetHeader("To", emails...)
 	m.SetHeader("Subject", campaign.Name)
 	m.SetBody("text/html", campaign.Content)
