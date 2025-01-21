@@ -6,11 +6,16 @@ GET {{url}}/campaings
 Authorization: Bearer {{accessToken}}
 ###
 
-GET {{url}}/campaings/ctul1bbi1v0efppvii
-
+GET {{url}}/campaings/cu3t8uri1v05mueb3ua0
+Authorization: Bearer {{accessToken}}
 ###
 
 PATCH  {{url}}/campaings/ctul1bbi1v0efviiog/cancel
+
+###
+
+PATCH {{url}}/campaings/cu3t8uri1v05mueb3ua0/start
+Authorization: Bearer {{accessToken}}
 
 ###
 
@@ -23,10 +28,11 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "name": "Campaing1",
-  "content": "Content 1",
+  "name": "Teste de campanha",
+  "content": "olá eu",
   "emails": [
-    "renan@email.com"
+    "renanalmeida2019.ra@gmail.com",
+    "renanalmeida2015.ra@hotmail.com"
   ]
 }
 
