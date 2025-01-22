@@ -1,7 +1,6 @@
 package campaign
 
 import (
-	"fmt"
 	internalerrors "projetoEmail/internal/internal_errors"
 )
 
@@ -33,7 +32,7 @@ func (s *Service) Create(dto NewCampaignDTO) (string, error) {
 	}
 
 	id := campaign.ID
-
+	 
 	return id, nil
 }
 
@@ -92,6 +91,21 @@ func (s *Service) Delete(id string) error {
 	return nil
 }
 
+func (s *Service) SendMailAndUpdateStatus(campaign *Campaign) error {
+	err := s.SendMail(campaign)
+
+	if err != nil {
+		campaign.Fail()
+		_ = s.Repository.Update(campaign.ID, campaign)
+		return err
+	}
+
+	campaign.Doned()
+	_ = s.Repository.Update(campaign.ID, campaign)
+
+	return nil
+}
+
 func (s *Service) Start(id string) error {
 
 	campaign, err := s.Repository.Get(id)
@@ -103,16 +117,13 @@ func (s *Service) Start(id string) error {
 		return internalerrors.NewErrCampaignNotPending(id)
 	}
 
-	go func(c Campaign) {
-		err := s.SendMail(&c)
-		if err != nil {
-			fmt.Printf("Error sending email: %s\n", err.Error())
-			return
-		}
+	campaign.Start()
+	err = s.Repository.Update(id, &campaign)
+	if err != nil {
+		return internalerrors.NewErrInternal(err.Error())
+	}
 
-		c.Doned()
-		_ = s.Repository.Update(id, &c)
-	}(campaign)
+	go s.SendMailAndUpdateStatus(&campaign)
 
 	return nil
 }
