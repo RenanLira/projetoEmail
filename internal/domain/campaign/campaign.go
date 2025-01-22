@@ -27,8 +27,10 @@ func (s Status) MarshalJSON() ([]byte, error) {
 
 const (
 	Pending Status = iota
+	Started
 	Cancelled
 	Deleted
+	Falied
 	Done
 )
 
@@ -53,6 +55,14 @@ func (c *Campaign) Delete() {
 
 func (c *Campaign) Doned() {
 	c.Status = Done
+}
+
+func (c *Campaign) Start() {
+	c.Status = Started
+}
+
+func (c *Campaign) Fail() {
+	c.Status = Falied
 }
 
 func New(name string, content string, emails []string, createdBy string) (campaign *Campaign, err error) {
