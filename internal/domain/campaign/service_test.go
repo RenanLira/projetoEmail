@@ -38,7 +38,9 @@ func Test_CreateCampaign(t *testing.T) {
 		Emails:    []string{"teste@email.com"},
 	}
 
-	repositoryMock.On("Save", mock.Anything).Return(nil)
+	repositoryMock.On("Save", mock.MatchedBy(func(campaign *campaign.Campaign) bool {
+		return true
+	})).Return(nil)
 
 	_, err := service.Create(dto)
 

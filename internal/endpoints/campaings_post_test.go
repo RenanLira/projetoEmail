@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -61,7 +62,10 @@ func Test_CampaignsPost_should_save_new_campaign(t *testing.T) {
 		Emails:  []string{"teste@email.com"},
 	}
 
-	service.On("Create", body).Return("123", nil)
+	service.On("Create", mock.MatchedBy(func(c campaign.NewCampaignDTO) bool {
+
+		return c.CreatedBy == "test@context.com"
+	})).Return("123", nil)
 
 	var buf bytes.Buffer
 	json.NewEncoder(&buf).Encode(body)
@@ -69,7 +73,8 @@ func Test_CampaignsPost_should_save_new_campaign(t *testing.T) {
 	req, _ := http.NewRequest("POST", "/", &buf)
 	res := httptest.NewRecorder()
 
-	handler.CampaignPost(res, req)
+	ctx := context.WithValue(req.Context(), "email", "test@context.com")
+	handler.CampaignPost(res, req.WithContext(ctx))
 
 	assert.Equal(http.StatusCreated, res.Code)
 }

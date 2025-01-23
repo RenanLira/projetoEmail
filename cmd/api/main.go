@@ -29,7 +29,8 @@ func main() {
 	service := campaign.Service{Repository: &database.CampaignRepository{Db: db}, SendMail: mail.SendMail}
 	handler := endpoints.Handler{CampaignService: &service}
 	r.Route("/campaings", func(r chi.Router) {
-		r.Use(endpoints.Auth)
+		authHandler := endpoints.NewAuthHandler()
+		r.Use(authHandler.Auth)
 
 		r.Post("/", handler.CampaignPost)
 		r.Get("/", handler.CampaignsGet)
