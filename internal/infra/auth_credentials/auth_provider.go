@@ -21,7 +21,7 @@ type AuthProviderImp struct {
 }
 
 func (ap AuthProviderImp) VerifyToken(token string) error {
-	verifier := ap.Provider.Verifier(&oidc.Config{ClientID: "projetoEmail"})
+	verifier := ap.Provider.Verifier(&oidc.Config{ClientID: os.Getenv("OIDC_CLIENT_ID")})
 	_, err := verifier.Verify(ap.Context, token)
 
 	return err
